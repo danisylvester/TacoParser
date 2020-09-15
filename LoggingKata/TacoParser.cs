@@ -6,7 +6,7 @@
     public class TacoParser
     {
         readonly ILog logger = new TacoLogger();
-        
+
         public ITrackable Parse(string line)
         {
             logger.LogInfo("Begin parsing");
@@ -19,26 +19,39 @@
             {
                 // Log that and return null
                 // Do not fail if one record parsing fails, return null
-                return null; // TODO Implement
+                // TODO Implement
+                logger.LogError("Less than 3 elements in record.");
             }
 
-            // grab the latitude from your array at index 0
-            // grab the longitude from your array at index 1
+            var tacoBell = new TacoBell();
+            string name = cells[2];
             // grab the name from your array at index 2
+            tacoBell.Name = name;
+            Point location = new Point();
 
-            // Your going to need to parse your string as a `double`
-            // which is similar to parsing a string as an `int`
+            double latitude;
+            double longitude;
 
-            // You'll need to create a TacoBell class
-            // that conforms to ITrackable
+            // grab the latitude from your array at index 0
+            if (double.TryParse(cells[0], out latitude))
+                location.Latitude = latitude;
+            else
+            {
+                logger.LogError("Could not parse latitude.");
+            }
 
-            // Then, you'll need an instance of the TacoBell class
-            // With the name and point set correctly
+            // grab the longitude from your array at index 1
+            if (double.TryParse(cells[1], out longitude))
+                location.Longitude = longitude;
+            else
+            {
+                logger.LogError("Could not parse longitude.");
+            }
+            
+            tacoBell.Location = location;
 
-            // Then, return the instance of your TacoBell class
-            // Since it conforms to ITrackable
+            return tacoBell;
 
-            return null;
         }
     }
 }
